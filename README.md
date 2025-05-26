@@ -64,4 +64,4 @@ O desafio para essa vaga consiste em criar uma aplicação monolítica (Ruby on 
 
 ## Entrega
 
-O candidato tem a 7 dias a partir do recebimento do desafio por email para entregá-lo. Aos que concluírem o desafio em tempo, em respeito ao tempo dedicado, faremos um feedback técnico da forma mais detalhada e coesa possível.
+Deverá fazer o fork desse repositório. O candidato tem a 7 dias a partir do recebimento do desafio por email para entregá-lo. Aos que concluírem o desafio em tempo, em respeito ao tempo dedicado, faremos um feedback técnico da forma mais detalhada e coesa possível.
