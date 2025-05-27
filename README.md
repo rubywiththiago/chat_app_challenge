@@ -7,6 +7,8 @@ O desafio para essa vaga consiste em criar uma aplicação monolítica (Ruby on 
 - Ruby on Rails (obrigatório);
 - VueJS (obrigatório, empacotamento fica ao seu critério);
 - Banco de dados é livre porém, temos preferência pelo PostgreSQL;
+- Websockets para conexões realtime;
+- RSpec para testes (testes exclusivos em frontend é livre)
 
 > Você está livre para usar as ferramentas e padrões que desejar, mas, é obrigatório que a estrutura da aplicação seja monolítica.
 
