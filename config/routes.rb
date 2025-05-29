@@ -15,4 +15,10 @@ Rails.application.routes.draw do
   get '*path', to: 'home#index', constraints: ->(req) do
     req.format.html?
   end
+
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      resources :messages, only: %i[index create update destroy]
+    end
+  end
 end

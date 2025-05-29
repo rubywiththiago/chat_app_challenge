@@ -32,7 +32,7 @@ const activeTab = ref('login')
 
 <style scoped>
 .auth-container {
-  background-color: var(--system-bg, #e0f7ff);
+  background-color: var(--system-bg, #2d92b4);
   height: 100vh;
   display: flex;
   align-items: center;
