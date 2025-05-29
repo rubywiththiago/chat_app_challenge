@@ -1,0 +1,40 @@
+pt-BR:
+  hello: "Olá Mundo"
+
+  activerecord:
+    models:
+      user: "Usuário"
+      message: "Mensagem"
+    attributes:
+      user:
+        name:                   "Nome"
+        username:               "Usuário"
+        email:                  "Email"
+        password:               "Senha"
+        password_confirmation:  "Confirmação de senha"
+      message:
+        text:                   "Texto"
+    errors:
+      messages:
+        blank:       "não pode ficar em branco"
+        too_short:   "é muito curto (mínimo de %{count} caracteres)"
+        too_long:    "é muito longo (máximo de %{count} caracteres)"
+        invalid:     "não é válido"
+        taken:       "já está em uso"
+
+  errors:
+    format: "%{attribute} %{message}"
+
+  devise:
+    sessions:
+      signed_in:      "Login efetuado com sucesso."
+      signed_out:     "Logout efetuado com sucesso."
+      invalid:        "Email ou senha inválidos."
+    registrations:
+      signed_up:              "Bem-vindo! Seu cadastro foi realizado com sucesso."
+      signed_up_but_inactive: "Cadastro realizado. Por favor, ative sua conta antes de entrar."
+    passwords:
+      send_instructions:      "Enviamos instruções para resetar sua senha para %{email}."
+      updated:                "Sua senha foi alterada com sucesso."
+    failure:
+      unauthenticated:        "Você precisa entrar ou se cadastrar para continuar."

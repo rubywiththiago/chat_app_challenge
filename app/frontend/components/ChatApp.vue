@@ -1,55 +1,77 @@
 <template>
-  <div class="chat-container" style="display:flex; flex-direction:column; height:100vh; border:1px solid #ddd; border-radius:8px; overflow:hidden;">
-    <!-- Mensagens -->
-    <div
-      class="messages"
-      style="flex:1; padding:16px; overflow-y:auto; background:#f9f9f9;"
-    >
-      <div
-        v-for="(msg, i) in messages"
-        :key="i"
-        :class="['message', msg.role]"
-        style="display:flex; margin-bottom:12px;"
-      >
-        <!-- Avatar, caso tenha, deixei reservado -->
-        <div v-if="msg.role === 'assistant'" style="margin-right:8px;">
-          <img src="" alt="Bot" style="width:32px; height:32px; border-radius:50%;" />
-        </div>
-        <div v-else style="margin-left:8px; margin-right:auto;"></div>
+  <div class="app-container">
+    <login-form
+      v-if="!user && !showRegister"
+      @authenticated="onAuth"
+      @switch-to-register="showRegister = true"
+    />
+    <register-form
+      v-else-if="!user && showRegister"
+      @authenticated="onAuth"
+      @switch-to-login="showRegister = false"
+    />
 
-        <!-- Conteúdo da mensagem, ainda sem regras e validacoes, apenas o basico template -->
-        <div
-          style="
-            max-width:70%;
-            padding:12px;
-            border-radius:12px;
-            background:#fff;
-            box-shadow:0 1px 3px rgba(0,0,0,0.1);
-          "
-        >
-          {{ msg.content }}
-        </div>
-
-        <!-- Avatar do usuário, ainda nao sei se vai ter de fato -->
-        <div v-if="msg.role === 'user'" style="margin-left:8px;">
-          <img src="" alt="Você" style="width:32px; height:32px; border-radius:50%;" />
-        </div>
-      </div>
-    </div>
-
-    <!-- Input -->
-    <div style="padding:12px; border-top:1px solid #eee; display:flex; gap:8px; background:#fff;">
-      <textarea
-        v-model="newMessage"
-        placeholder="Digite sua mensagem..."
-        style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px; resize:none; height:48px;"
-      ></textarea>
-      <button
-        @click="sendMessage"
-        style="padding:0 16px; border:none; border-radius:4px; background:#409EFF; color:#fff; cursor:pointer;"
-      >
-        Enviar
-      </button>
+    <div v-else class="logged-in">
+      <p>Olá, {{ user.username }}!</p>
+      <button @click="logout">Logout</button>
     </div>
   </div>
 </template>
+
+<script>
+import { ref, onMounted } from 'vue'
+import LoginForm    from './LoginForm.vue'
+import RegisterForm from './RegisterForm.vue'
+import ChatRoom from './ChatRoom.vue'
+
+export default {
+  components: { LoginForm, RegisterForm, ChatRoom },
+  setup() {
+    const user = ref(null)
+    const showRegister = ref(false)
+
+    onMounted(async () => {
+      const res  = await fetch('/current_user', { credentials: 'same-origin' })
+      const json = await res.json()
+      user.value = json.user
+    })
+
+    function onAuth(u) {
+      user.value = u
+    }
+
+    async function logout() {
+      await fetch('/users/sign_out', {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        },
+        credentials: 'same-origin'
+      })
+      user.value = null
+      showRegister.value = false
+    }
+
+    return { user, onAuth }
+  }
+}
+</script>
+
+<style>
+.app-container {
+  max-width: 400px;
+  margin: 2rem auto;
+}
+.logged-in {
+  text-align: center;
+  margin-top: 2rem;
+}
+.logged-in button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #f56c6c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+</style>
