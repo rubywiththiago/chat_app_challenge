@@ -3,38 +3,58 @@ class Api::V1::MessagesController < ApplicationController
   before_action :set_message, only: %i[update destroy]
 
   def index
-    render json: Message.includes(:user).order(:created_at)
-      .map { |m| m.as_json(include: { user: { only: %i[id username]}})}
+    result = Mensagens::ListMensagensService.call
+
+    if result[:success]
+      render json: result[:mensagens]
+                 .map { |m| m.as_json(include: { user: { only: %i[id username] } }) },
+             status: :ok
+    else
+      render json: { errors: result[:errors] }, status: :unprocessable_entity
+    end
   end
 
   def create
-    msg = current_user.messages.build(message_params)
-    if msg.save
+    result = Mensagens::CreateMensagemService.new(user: current_user, params: message_params).call
+
+    if result[:success]
       head :created
     else
-      render json: { errors: msg.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: result[:errors] }, status: :unprocessable_entity
     end
   end
 
   def update
-    return head :forbidden unless @message.user_id == current_user.id
+    result = Mensagens::UpdateMensagemService.new(user: current_user, id: @message.id, params: message_params).call
 
-    if @message.update(message_params)
-      render json: @message.as_json(include: { user: { only: %i[id username] } })
+    if result[:success]
+      render json: result[:mensagem].as_json(include: { user: { only: %i[id username] } }),
+             status: :ok
     else
-      render json: { errors: @message.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: result[:errors] }, status: :unprocessable_entity
     end
   end
 
   def destroy
-    return head :forbidden unless @message.user_id == current_user.id
+    service = Mensagens::DestroyMensagemService.new(user: current_user, id: @message.id)
+    result  = service.call
 
-    @message.destroy
-    render json: { id: @message.id }, status: :ok
+    if result[:success]
+      render json: { id: result[:id] }, status: :ok
+    else
+      render json: { errors: result[:errors] }, status: :unprocessable_entity
+    end
   end
 
   private
 
-  def set_message = @message = Message.find(params[:id])
-  def message_params = params.require(:message).permit(:text)
+  def set_message
+    @message = Message.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { errors: ['Mensagem não encontrada'] }, status: :not_found
+  end
+
+  def message_params
+    params.require(:message).permit(:text)
+  end
 end
