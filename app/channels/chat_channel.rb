@@ -4,6 +4,17 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def speak(data)
-    current_user.messages.create!(text: data['text'])
+    message = current_user.messages.new(text: data["text"])
+
+    if message.save
+      ActionCable.server.broadcast("chat_channel", {
+        message: render_message(message)
+      })
+    else
+      # Retorna erro para o remetente apenas
+      transmit({
+        error: message.errors.full_messages.join(", ")
+      })
+    end
   end
 end

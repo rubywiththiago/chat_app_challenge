@@ -27,7 +27,7 @@
           <strong v-if="msg.user_id !== userStore.user.id">
             {{ msg.user.username }}:
           </strong>
-          {{ msg.text }}
+          <span v-text="msg.text"></span>
         </div>
       </div>
     </div>
@@ -35,6 +35,7 @@
     <!-- Input de nova mensagem / edição -->
     <footer class="chat-footer">
       <textarea
+        maxlength="1000"
         v-model="draft"
         @keydown.enter.prevent="onEnter"
         @keydown.shift.enter.stop
@@ -191,13 +192,13 @@
   .chat-messages { flex: 1; overflow-y: auto; padding: 16px; background: #E5E5E5; }
   .message-row { display: flex; align-items: flex-start; margin-bottom: 8px; }
   .message-row.mine { justify-content: flex-end; }
-  .bubble { position: relative; background: #fff; padding: 8px 12px; border-radius: 4px; box-shadow: 0 1px 1px rgba(0,0,0,0.1); max-width: 70%; }
+  .bubble { position: relative; background: #fff; padding: 8px 12px; border-radius: 4px; box-shadow: 0 1px 1px rgba(0,0,0,0.1); max-width: 70%; word-wrap: break-word; word-break: break-word; }
   .bubble.mine { background: #dcf8c6; }
-  .msg-options { position: absolute; top: 4px; right: 4px; }
+  /* .msg-options { position: absolute; top: 4px; right: 4px; }
   .options-btn { background: transparent; border: none; cursor: pointer; font-size: 18px; line-height: 1; margin-left: 40%; margin-top: 15%;}
-  .options-menu { position: absolute; top: 24px; right: 0; background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); z-index: 10; }
+  .options-menu { position: absolute; top: 24px; right: 0; background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); z-index: 10; position: absolute; }
   .options-menu button { display: block; padding: 8px 12px; width: 100%; background: none; border: none; text-align: left; cursor: pointer; }
-  .options-menu button:hover { background: #f0f0f0; }
+  .options-menu button:hover { background: #f0f0f0; } */
   .edit-area { display: flex; align-items: center; }
   .edit-input { flex: 1; padding: 6px 8px; font-size: 14px; margin-right: 4px; }
   .save-btn, .cancel-btn { margin-left: 4px; padding: 4px 8px; border: none; cursor: pointer; border-radius: 4px; }
@@ -208,6 +209,56 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+}
+
+.message-row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.msg-options {
+  position: absolute;
+  top: 4px;
+  right: -5px;
+  /* left: 1px; */
+}
+
+.options-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px;
+}
+
+.options-menu {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 10;
+  min-width: 100px;
+}
+
+.options-menu button {
+  display: block;
+  padding: 6px 12px;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.options-menu button:hover {
+  background: #f0f0f0;
 }
 
 /* Header fixo no topo */
@@ -241,7 +292,6 @@
   justify-content: flex-end;
 }
 
-/* conteúdo da mensagem (username + bolha) */
 .message-content {
   max-width: 70%;
 }
@@ -253,13 +303,6 @@
   margin-bottom: 2px;
 }
 
-/* bolha de texto */
-.bubble {
-  background: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-}
 
 /* diferencia as mensagens do usuario atual */
 .message-row.mine .bubble {

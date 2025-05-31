@@ -2,25 +2,25 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   respond_to :html, :json
 
   def show
-    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
+    result = Users::ConfirmAccountService.new(token: params[:confirmation_token]).call
 
-    if resource.errors.empty?
+    if result[:success]
       redirect_to root_path
     else
       respond_to do |format|
         format.html do
-          flash[:alert] = resource.errors.full_messages.join(', ')
+          flash[:alert] = result[:errors].join(', ')
           redirect_to new_user_session_path
         end
-        format.json { render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity }
+        format.json { render json: { errors: result[:errors] }, status: :unprocessable_entity }
       end
     end
   end
 
   def create
-    self.resource = resource_class.send_confirmation_instructions(resource_params)
+    result = Users::ResendConfirmationService.new(params: resource_params).call
 
-    if successfully_sent?(resource)
+    if result[:success]
       respond_to do |format|
         format.html do
           flash[:notice] = 'Instruções de confirmação reenviadas para seu e-mail.'
@@ -31,10 +31,10 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
     else
       respond_to do |format|
         format.html do
-          flash[:alert] = resource.errors.full_messages.join(', ')
+          flash[:alert] = result[:errors].join(', ')
           redirect_back fallback_location: new_user_session_path
         end
-        format.json { render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity }
+        format.json { render json: { errors: result[:errors] }, status: :unprocessable_entity }
       end
     end
   end
