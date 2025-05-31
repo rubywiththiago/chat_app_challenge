@@ -1,7 +1,7 @@
 <template>
   <div>
     <login-form  v-if="mode==='login'"  @authenticated="goChat" @switch-to-register="mode='register'" />
-    <register-form v-else                     @authenticated="goChat" @switch-to-login="mode='login'" />
+    <register-form v-else @authenticated="goChat" @switch-to-login="mode='login'" />
   </div>
 </template>
 

@@ -3,10 +3,8 @@ class Api::V1::MessagesController < ApplicationController
   before_action :set_message, only: %i[update destroy]
 
   def index
-    render json: Message
-                  .includes(:user)
-                  .order(:created_at)
-                  .map { |m| m.as_json(include: { user: { only: %i[id username] } }) }
+    render json: Message.includes(:user).order(:created_at)
+      .map { |m| m.as_json(include: { user: { only: %i[id username]}})}
   end
 
   def create
@@ -19,17 +17,24 @@ class Api::V1::MessagesController < ApplicationController
   end
 
   def update
-    head :forbidden and return unless @message.user_id == current_user.id
-    @message.update!(message_params)
+    return head :forbidden unless @message.user_id == current_user.id
+
+    if @message.update(message_params)
+      render json: @message.as_json(include: { user: { only: %i[id username] } })
+    else
+      render json: { errors: @message.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def destroy
-    head :forbidden and return unless @message.user_id == current_user.id
+    return head :forbidden unless @message.user_id == current_user.id
+
     @message.destroy
+    render json: { id: @message.id }, status: :ok
   end
 
   private
 
-  def set_message   = @message = Message.find(params[:id])
+  def set_message = @message = Message.find(params[:id])
   def message_params = params.require(:message).permit(:text)
 end

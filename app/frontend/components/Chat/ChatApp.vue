@@ -20,12 +20,10 @@
 
 <script>
 import { ref, onMounted } from 'vue'
-import LoginForm    from './LoginForm.vue'
-import RegisterForm from './RegisterForm.vue'
-import ChatRoom from './ChatRoom.vue'
+import ChatRoom from './components/Chat/ChatRoom.vue'
 
 export default {
-  components: { LoginForm, RegisterForm, ChatRoom },
+  components: { ChatRoom },
   setup() {
     const user = ref(null)
     const showRegister = ref(false)

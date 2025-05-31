@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AuthApp from '../components/AuthApp.vue'
-import ChatRoom       from '../components/ChatRoom.vue'
+import AuthApp from '../components/Auth/AuthApp.vue'
+import ChatRoom from '../components/Chat/ChatRoom.vue'
 
 const routes = [
   { path: '/',       component: AuthApp },
