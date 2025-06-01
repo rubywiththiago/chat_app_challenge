@@ -50,9 +50,9 @@ cd chat_app_challenge
 
 bundle install
 
-yarn install
-
 rails db:setup
+
+yarn install
 
 # terminal 1
 bin/vite dev
