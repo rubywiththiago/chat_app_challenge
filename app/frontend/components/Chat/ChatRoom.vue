@@ -6,10 +6,23 @@
       <n-button size="small" @click="logout" type="error" class="logout-btn">Sair</n-button>
     </header>
 
+    <div class="chat-filters">
+      <input
+        v-model="filters.author"
+        placeholder="Filtrar por autor"
+        class="filter-input"
+      />
+      <input
+        v-model="filters.text"
+        placeholder="Filtrar por texto"
+        class="filter-input"
+      />
+    </div>
+
     <!-- Mensagens roláveis -->
     <div class="chat-messages" ref="scrollContainer">
       <div
-        v-for="msg in messages"
+        v-for="msg in filteredMessages"
         :key="msg.id"
         class="message-row"
         :class="{ mine: msg.user_id === userStore.user.id }"
@@ -24,7 +37,7 @@
           </div>
 
           <!-- Exibição da mensagem -->
-          <strong v-if="msg.user_id !== userStore.user.id">
+          <strong v-if="msg.user_id !== userStore.user.id && msg.user">
             {{ msg.user.username }}:
           </strong>
           <span v-text="msg.text"></span>
@@ -50,7 +63,7 @@
 </template>
 
 <script setup>
-  import { ref, reactive, onMounted, onUnmounted, nextTick } from 'vue'
+  import { ref, reactive, onMounted, onUnmounted, nextTick, computed } from 'vue'
   import { cable } from '../../cable'
   import { userStore } from '../../stores/user'
 
@@ -60,6 +73,20 @@
   const menuOpen = reactive({})
   const editingId = ref(null)
   let subscription = null
+
+  const filters = reactive({ author: '', text: '' })
+
+  const filteredMessages = computed(() => {
+    return messages.value.filter((msg) => {
+      const author = msg.user?.username?.toLowerCase() || ''
+      const text   = msg.text?.toLowerCase() || ''
+
+      const matchAuthor = !filters.author || author.includes(filters.author.toLowerCase())
+      const matchText   = !filters.text   || text.includes(filters.text.toLowerCase())
+
+      return matchAuthor && matchText
+    })
+  })
 
   onMounted(async () => {
     // carrega histórico
@@ -205,7 +232,22 @@
   .save-btn { background: #0052cc; color: #fff; }
   .cancel-btn { background: #ccc; color: #333; }
 
-  .chat-container {
+  .chat-filters {
+  display: flex;
+  gap: 12px;
+  padding: 10px 16px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+}
+
+.filter-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.chat-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
