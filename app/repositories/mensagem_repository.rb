@@ -3,21 +3,21 @@ class MensagemRepository
     delegate_missing_to :Message
 
     def create!(attrs)
-      create!(attrs)
+      Message.create!(attrs)
     end
 
     def list_all(order: :asc)
-      includes(:user).order(created_at: order)
+      Message.includes(:user).order(created_at: order)
     end
 
     def update(id, attrs)
-      message = find(id)
+      message = Message.find(id)
       message.update!(attrs)
       message
     end
 
     def destroy(id)
-      message = find(id)
+      message = Message.find(id)
       message.destroy!
       id
     end

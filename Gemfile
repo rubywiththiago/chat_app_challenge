@@ -49,12 +49,17 @@ group :development do
   gem 'pry-rails'
   gem 'letter_opener'
   gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem 'faker'
+  gem 'shoulda-matchers'
+  gem 'database_cleaner-active_record'
 end
 
 gem "devise", "~> 4.9"
