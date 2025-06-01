@@ -1,0 +1,9 @@
+pt-BR:
+  errors:
+    messages:
+      already_confirmed: "já foi confirmado"
+      not_found: "não encontrado"
+  devise:
+    failure:
+      not_found_in_database: "não encontrado"
+      already_confirmed: "já foi confirmado"
