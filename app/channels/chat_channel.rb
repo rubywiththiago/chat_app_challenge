@@ -1,20 +1,25 @@
 class ChatChannel < ApplicationCable::Channel
   def subscribed
-    stream_from 'chat_channel'
+    stream_from "chat_channel"
   end
 
   def speak(data)
-    message = current_user.messages.new(text: data["text"])
+    message = Message.create!(text: data['text'], user: current_user)
 
-    if message.save
-      ActionCable.server.broadcast("chat_channel", {
-        message: render_message(message)
-      })
-    else
-      # Retorna erro para o remetente apenas
-      transmit({
-        error: message.errors.full_messages.join(", ")
-      })
-    end
+    ActionCable.server.broadcast(
+      "chat_channel",
+      {
+        id: message.id,
+        text: message.text,
+        user_id: message.user_id,
+        created_at: message.created_at,
+        updated_at: message.updated_at,
+        user: {
+          id: message.user.id,
+          username: message.user.username
+        },
+        action: "create"
+      }
+    )
   end
 end
