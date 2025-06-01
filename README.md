@@ -44,6 +44,8 @@ Aplicação fullstack com:
 
 ### 1. Clone o repositório
 
+Antes de rodar a aplicação, crie um usuário no PostgreSQL e adicione no database.yml
+
 ```bash
 git clone git@github.com:rubywiththiago/chat_app_challenge.git
 cd chat_app_challenge
@@ -63,7 +65,7 @@ bin/rails server
 ```
 ### 2. Rodando Testes RSPEC
 ```
-rspec
+bundle exec rspec
 
 ```
 
