@@ -5,7 +5,7 @@ module Mensagens
     end
 
     def call
-      mensagens = MensagemRepository.list_all(order: :asc)
+      mensagens = MensagemRepository.list_all(order: :desc)
       {
         success: true,
         mensagens: mensagens

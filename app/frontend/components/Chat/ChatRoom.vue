@@ -86,6 +86,8 @@
 
       return matchAuthor && matchText
     })
+
+    return base.slice().reverse()
   })
 
   onMounted(async () => {
@@ -104,7 +106,7 @@
           switch (msg.action) {
             case 'create':
               if (idx === -1) {
-                messages.value.push(msg)
+                messages.value.unshift(msg)
                 nextTick(scrollToBottom)
               }
               break
@@ -123,7 +125,7 @@
 
             default:
               if (idx === -1) {
-                messages.value.push(msg)
+                messages.value.unshift(msg)
                 nextTick(scrollToBottom)
               }
               break
@@ -194,7 +196,7 @@
 
   function scrollToBottom() {
     const el = scrollContainer.value
-    if (el) el.scrollTop = el.scrollHeight
+    if (el) el.scrollTop = 0
   }
 
   function logout() {
