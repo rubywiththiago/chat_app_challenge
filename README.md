@@ -1,69 +1,71 @@
-# Desafio
+# 💬 Chat App Challenge
 
-O desafio para essa vaga consiste em criar uma aplicação monolítica (Ruby on Rails + VueJS) de um mini app de mensagens com autenticação de usuários e CRUD de mensagens em um canal único.
+Este projeto foi desenvolvido como parte de um **desafio técnico**. Trata-se de uma aplicação de chat completa com autenticação, troca de mensagens em tempo real e testes automatizados — tudo em um único projeto Rails monolítico com Vue.js.
 
-## Requisitos técnicos
+---
 
-- Ruby on Rails (obrigatório);
-- VueJS (obrigatório, empacotamento fica ao seu critério);
-- Banco de dados é livre porém, temos preferência pelo PostgreSQL;
-- Websockets para conexões realtime;
-- RSpec para testes (testes exclusivos em frontend é livre)
+## 📚 Descrição
 
-> Você está livre para usar as ferramentas e padrões que desejar, mas, é obrigatório que a estrutura da aplicação seja monolítica.
+Aplicação fullstack com:
 
-## Regras de negócio
+- Backend em **Ruby on Rails**
+- Frontend com **Vue.js 3** usando **Vite**
+- Autenticação com **Devise (com confirmação por e-mail)**
+- Mensagens em tempo real via **ActionCable**
+- Interface interativa com filtros de mensagens
+- Testes automatizados com **RSpec**
 
-### Usuário
+---
 
-- Nome: obrigatório e deverá ter entre 3-255 caracteres;
-- Username: obrigatório e deverá ter entre 5-50 caracteres e permitir apenas letras, números e os caracteres `-` e `_`.  Deve ser único;
-- Email: obrigatório e deverá ser válido. Também deve ser único;
-- Senha: obrigatória e deverá ter entre 20-100 caracteres. Deve ter o campo de confirmação.
+## 🎯 Funcionalidades
 
-### Mensagem
+- ✅ Cadastro e login de usuários com confirmação por e-mail
+- ✅ Envio e recebimento de mensagens em tempo real
+- ✅ Filtros por autor e conteúdo da mensagem
+- ✅ Frontend com Naive UI (Vue)
+- ✅ Testes com RSpec para controllers e services
 
-- Texto: deve ser obrigatório e ter até 1000 caracteres;
-- Apenas o autor pode editar/remover suas mensagens;
+---
 
-## Fluxo da Aplicação
+## ⚙️ Tecnologias e Ferramentas
 
-### Página Inicial
+- **Ruby on Rails 7**
+- **Devise** (`confirmable`, `database_authenticatable`, etc)
+- **PostgreSQL**
+- **Vue.js 3**
+- **Vite + vite_rails**
+- **ActionCable (WebSockets)**
+- **RSpec + FactoryBot + Faker**
+- **Naive UI (Vue)**
 
-- Deve obedecer a seguinte lógica: Quando o usuário estiver logado, a página é o canal de mensagens. Caso contrário, deverá ser a página de login;
-- Sem ser autenticado, o usuário poderá apenas fazer login e registro;
+---
 
-## Autenticação
+## 🚀 Como rodar localmente
 
-- Usuário deverá ser logado apenas se o seu username/email e senha estiverem validado;
-- Opcional: Travar login por 1h após 5 tentativas não sucedidas de autenticação. Deverá conter desbloqueio.
+### 1. Clone o repositório
 
-## Registro
+```bash
+git clone git@github.com:rubywiththiago/chat_app_challenge.git
+cd chat_app_challenge
 
-- No registro de um usuário, após criá-lo, é preciso enviar um link de confirmação para o seu email (envio simulado é aceitável);
-- Usuários duplicados são inaceitáveis;
+bundle install
 
-## Canal de Mensagens
+yarn install
 
-- Deverá listar todas as mensagens (ordenados das mais recentes);
-- Um form/componente para nova mensagem;
-- Botões para editar/excluir mensagem;
-- Visualização de mensagens em tempo real;
-- Opcional: Buscar mensagens por texto e filtrar por autor.
+rails db:setup
 
-## Avaliação
+# terminal 1
+bin/vite dev
 
-- Iremos avaliar se a regra de negócio foi aplicada corretamente, e, a qualidade do código (organização, estrutura interna). Tratamento de erros e edge cases são levados em conta. Cobertura de testes serão levados em conta;
-- A interface pode ser bem simples. Visual, UI e UX contarão pontos;
-- Requisitos opcionais podem ser deixados de lado, porém, farão diferença em sua avaliação.
+# terminal 2
+bin/rails server
 
-## Critérios
+```
+### 2. Rodando Testes RSPEC
+```
+rspec
 
-1. TUDO, absolutamente TUDO, será olhado (sim, teremos carinho pelo seu tempo gasto e olharemos com destreza seu teste);
-2. Esse desafio foca na questão fullstack, então, backend e frontend são igualmente importantes;
-3. Deployar sua aplicação em modo produção será um plus fundamental, porém, opcional. A plataforma fica a critério do candidato;
-4. A atitude faz total diferença para um verdadeiro profissional em sua resolução de problemas. Interprete esse item como desejar.
+```
 
-## Entrega
-
-Deverá fazer o fork desse repositório. O candidato tem a 7 dias a partir do recebimento do desafio por email para entregá-lo. Aos que concluírem o desafio em tempo, em respeito ao tempo dedicado, faremos um feedback técnico da forma mais detalhada e coesa possível.
+Observações
+Este projeto é um monolito Rails que incorpora tanto o backend quanto o frontend, sem separar aplicações. Toda lógica de negócio está encapsulada em services testáveis.
